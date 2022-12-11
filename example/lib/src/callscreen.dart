@@ -155,9 +155,11 @@ class _MyCallScreenWidget extends State<CallScreenWidget>
 
   void _cleanUp() {
     if (_localStream == null) return;
-    _localStream?.getTracks().forEach((track) {
-      track.stop();
-    });
+    _localStream?.getTracks().forEach(
+      (track) {
+        track.stop();
+      },
+    );
     _localStream!.dispose();
     _localStream = null;
   }
@@ -348,18 +350,22 @@ class _MyCallScreenWidget extends State<CallScreenWidget>
     ];
 
     return labels
-        .map((row) => Padding(
+        .map(
+          (row) => Padding(
             padding: const EdgeInsets.all(3),
             child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: row
-                    .map((label) => ActionButton(
-                          title: label.keys.first,
-                          subTitle: label.values.first,
-                          onPressed: () => _handleDtmf(label.keys.first),
-                          number: true,
-                        ))
-                    .toList())))
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: row
+                  .map((label) => ActionButton(
+                        title: label.keys.first,
+                        subTitle: label.values.first,
+                        onPressed: () => _handleDtmf(label.keys.first),
+                        number: true,
+                      ))
+                  .toList(),
+            ),
+          ),
+        )
         .toList();
   }
 
@@ -399,12 +405,14 @@ class _MyCallScreenWidget extends State<CallScreenWidget>
       case CallStateEnum.ACCEPTED:
       case CallStateEnum.CONFIRMED:
         {
-          advanceActions.add(ActionButton(
-            title: _audioMuted ? 'unmute' : 'mute',
-            icon: _audioMuted ? Icons.mic_off : Icons.mic,
-            checked: _audioMuted,
-            onPressed: () => _muteAudio(),
-          ));
+          advanceActions.add(
+            ActionButton(
+              title: _audioMuted ? 'unmute' : 'mute',
+              icon: _audioMuted ? Icons.mic_off : Icons.mic,
+              checked: _audioMuted,
+              onPressed: () => _muteAudio(),
+            ),
+          );
 
           if (voiceOnly) {
             advanceActions.add(ActionButton(
@@ -413,11 +421,13 @@ class _MyCallScreenWidget extends State<CallScreenWidget>
               onPressed: () => _handleKeyPad(),
             ));
           } else {
-            advanceActions.add(ActionButton(
-              title: "switch camera",
-              icon: Icons.switch_video,
-              onPressed: () => _switchCamera(),
-            ));
+            advanceActions.add(
+              ActionButton(
+                title: "switch camera",
+                icon: Icons.switch_video,
+                onPressed: () => _switchCamera(),
+              ),
+            );
           }
 
           if (voiceOnly) {
@@ -521,42 +531,55 @@ class _MyCallScreenWidget extends State<CallScreenWidget>
       ));
     }
 
-    stackWidgets.addAll([
-      Positioned(
-        top: voiceOnly ? 48 : 6,
-        left: 0,
-        right: 0,
-        child: Center(
+    stackWidgets.addAll(
+      [
+        Positioned(
+          top: voiceOnly ? 48 : 6,
+          left: 0,
+          right: 0,
+          child: Center(
             child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Center(
-                child: Padding(
-                    padding: const EdgeInsets.all(6),
-                    child: Text(
-                      (voiceOnly ? 'VOICE CALL' : 'VIDEO CALL') +
-                          (_hold
-                              ? ' PAUSED BY ${_holdOriginator!.toUpperCase()}'
-                              : ''),
-                      style: TextStyle(fontSize: 24, color: Colors.black54),
-                    ))),
-            Center(
-                child: Padding(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Center(
+                    child: Padding(
+                  padding: const EdgeInsets.all(6),
+                  child: Text(
+                    (voiceOnly ? 'VOICE CALL' : 'VIDEO CALL') +
+                        (_hold
+                            ? ' PAUSED BY ${_holdOriginator!.toUpperCase()}'
+                            : ''),
+                    style: TextStyle(fontSize: 24, color: Colors.black54),
+                  ),
+                )),
+                Center(
+                  child: Padding(
                     padding: const EdgeInsets.all(6),
                     child: Text(
                       '$remoteIdentity',
                       style: TextStyle(fontSize: 18, color: Colors.black54),
-                    ))),
-            Center(
-                child: Padding(
+                    ),
+                  ),
+                ),
+                Center(
+                  child: Padding(
                     padding: const EdgeInsets.all(6),
-                    child: Text(_timeLabel,
-                        style: TextStyle(fontSize: 14, color: Colors.black54))))
-          ],
-        )),
-      ),
-    ]);
+                    child: Text(
+                      _timeLabel,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.black54,
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
 
     return Stack(
       children: stackWidgets,
@@ -566,16 +589,21 @@ class _MyCallScreenWidget extends State<CallScreenWidget>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text('[$direction] ${EnumHelper.getName(_state)}')),
-        body: Container(
-          child: _buildContent(),
+      appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Text('[$direction] ${EnumHelper.getName(_state)}')),
+      body: Container(
+        child: _buildContent(),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Padding(
+        padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 24.0),
+        child: Container(
+          width: 320,
+          child: _buildActionButtons(),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: Padding(
-            padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 24.0),
-            child: Container(width: 320, child: _buildActionButtons())));
+      ),
+    );
   }
 
   @override

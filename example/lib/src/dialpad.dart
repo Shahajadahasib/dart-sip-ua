@@ -46,9 +46,10 @@ class _MyDialPadWidget extends State<DialPadWidget>
 
   Future<Widget?> _handleCall(BuildContext context,
       [bool voiceOnly = false]) async {
-    var dest = _textController?.text;
+    var dest = _preferences.getString('number') ?? '';
     if (defaultTargetPlatform == TargetPlatform.android ||
-        defaultTargetPlatform == TargetPlatform.iOS) {
+        defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.fuchsia) {
       await Permission.microphone.request();
       await Permission.camera.request();
     }
@@ -136,162 +137,203 @@ class _MyDialPadWidget extends State<DialPadWidget>
     ];
 
     return labels
-        .map((row) => Padding(
+        .map(
+          (row) => Padding(
             padding: const EdgeInsets.all(12),
             child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: row
-                    .map((label) => ActionButton(
-                          title: label.keys.first,
-                          subTitle: label.values.first,
-                          onPressed: () => _handleNum(label.keys.first),
-                          number: true,
-                        ))
-                    .toList())))
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: row
+                  .map(
+                    (label) => ActionButton(
+                      title: label.keys.first,
+                      subTitle: label.values.first,
+                      onPressed: () => _handleNum(label.keys.first),
+                      number: true,
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+        )
         .toList();
   }
 
   List<Widget> _buildDialPad() {
     return [
       Container(
-          width: 360,
+        width: 360,
+        // color: Colors.red,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              width: 360,
+              child: TextField(
+                keyboardType: TextInputType.text,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 24, color: Colors.black54),
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                ),
+                controller: _textController,
+              ),
+            ),
+          ],
+        ),
+      ),
+      Container(
+        color: Colors.green,
+        width: 300,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: _buildNumPad(),
+        ),
+      ),
+      Container(
+        color: Colors.black,
+        width: 300,
+        child: Padding(
+          padding: const EdgeInsets.all(12),
           child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                    width: 360,
-                    child: TextField(
-                      keyboardType: TextInputType.text,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 24, color: Colors.black54),
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                      ),
-                      controller: _textController,
-                    )),
-              ])),
-      Container(
-          width: 300,
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: _buildNumPad())),
-      Container(
-          width: 300,
-          child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  ActionButton(
-                    icon: Icons.videocam,
-                    onPressed: () => _handleCall(context),
-                  ),
-                  ActionButton(
-                    icon: Icons.dialer_sip,
-                    fillColor: Colors.green,
-                    onPressed: () => _handleCall(context, true),
-                  ),
-                  ActionButton(
-                    icon: Icons.keyboard_arrow_left,
-                    onPressed: () => _handleBackSpace(),
-                    onLongPress: () => _handleBackSpace(true),
-                  ),
-                ],
-              )))
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              ActionButton(
+                icon: Icons.videocam,
+                onPressed: () => _handleCall(context),
+              ),
+              ActionButton(
+                icon: Icons.dialer_sip,
+                fillColor: Colors.green,
+                onPressed: () => _handleCall(context, true),
+              ),
+              ActionButton(
+                icon: Icons.keyboard_arrow_left,
+                onPressed: () => _handleBackSpace(),
+                onLongPress: () => _handleBackSpace(true),
+              ),
+            ],
+          ),
+        ),
+      )
     ];
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Dart SIP UA Demo"),
-          actions: <Widget>[
-            PopupMenuButton<String>(
-                onSelected: (String value) {
-                  switch (value) {
-                    case 'account':
-                      Navigator.pushNamed(context, '/register');
-                      break;
-                    case 'about':
-                      Navigator.pushNamed(context, '/about');
-                      break;
-                    default:
-                      break;
-                  }
-                },
-                icon: Icon(Icons.menu),
-                itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                      PopupMenuItem(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                              child: Icon(
-                                Icons.account_circle,
-                                color: Colors.black38,
-                              ),
-                            ),
-                            SizedBox(
-                              child: Text('Account'),
-                              width: 64,
-                            )
-                          ],
-                        ),
-                        value: 'account',
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text("Demo"),
+        actions: <Widget>[
+          PopupMenuButton<String>(
+            onSelected: (String value) {
+              switch (value) {
+                case 'account':
+                  Navigator.pushNamed(context, '/register');
+                  break;
+                case 'about':
+                  Navigator.pushNamed(context, '/about');
+                  break;
+                case 'settings':
+                  Navigator.pushNamed(context, '/settings');
+                  break;
+                default:
+                  break;
+              }
+            },
+            icon: Icon(Icons.menu),
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              PopupMenuItem(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: Icon(
+                        Icons.account_circle,
+                        color: Colors.black38,
                       ),
-                      PopupMenuItem(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Icon(
-                              Icons.info,
-                              color: Colors.black38,
-                            ),
-                            SizedBox(
-                              child: Text('About'),
-                              width: 64,
-                            )
-                          ],
-                        ),
-                        value: 'about',
-                      )
-                    ]),
+                    ),
+                    SizedBox(
+                      child: Text('Account'),
+                      width: 64,
+                    )
+                  ],
+                ),
+                value: 'account',
+              ),
+              PopupMenuItem(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Icon(
+                      Icons.info,
+                      color: Colors.black38,
+                    ),
+                    SizedBox(
+                      child: Text('About'),
+                      width: 64,
+                    )
+                  ],
+                ),
+                value: 'about',
+              ),
+              PopupMenuItem(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Icon(
+                      Icons.info,
+                      color: Colors.black38,
+                    ),
+                    SizedBox(
+                      child: Text('Settings'),
+                      width: 64,
+                    )
+                  ],
+                ),
+                value: 'settings',
+              )
+            ],
+          ),
+        ],
+      ),
+      body: Align(
+        alignment: Alignment(0, 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(6.0),
+              child: Center(
+                  child: Text(
+                'Status: ${EnumHelper.getName(helper!.registerState.state)}',
+                style: TextStyle(fontSize: 18, color: Colors.black54),
+              )),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(6.0),
+              child: Center(
+                  child: Text(
+                'Received Message: $receivedMsg',
+                style: TextStyle(fontSize: 14, color: Colors.black54),
+              )),
+            ),
+            Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: _buildDialPad(),
+              ),
+            ),
           ],
         ),
-        body: Align(
-            alignment: Alignment(0, 0),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(6.0),
-                    child: Center(
-                        child: Text(
-                      'Status: ${EnumHelper.getName(helper!.registerState.state)}',
-                      style: TextStyle(fontSize: 14, color: Colors.black54),
-                    )),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(6.0),
-                    child: Center(
-                        child: Text(
-                      'Received Message: $receivedMsg',
-                      style: TextStyle(fontSize: 14, color: Colors.black54),
-                    )),
-                  ),
-                  Container(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: _buildDialPad(),
-                  )),
-                ])));
+      ),
+    );
   }
 
   @override

@@ -44,15 +44,16 @@ class _MyRegisterWidget extends State<RegisterWidget>
   void _loadSettings() async {
     _preferences = await SharedPreferences.getInstance();
     setState(() {
-      _wsUriController.text =
-          _preferences.getString('ws_uri') ?? 'wss://tryit.jssip.net:10443';
+      _wsUriController.text = _preferences.getString('ws_uri') ??
+          'wss://webrtc-test.tolpar.com.bd:8089/ws';
       _sipUriController.text =
-          _preferences.getString('sip_uri') ?? 'hello_flutter@tryit.jssip.net';
+          _preferences.getString('sip_uri') ?? '901@webrtc-test.tolpar.com.bd';
       _displayNameController.text =
-          _preferences.getString('display_name') ?? 'Flutter SIP UA';
-      _passwordController.text = _preferences.getString('password') ?? '';
+          _preferences.getString('display_name') ?? 'Emergency Lift';
+      _passwordController.text = _preferences.getString('password') ??
+          '403bab07dae6ac37f47070c8986d1233';
       _authorizationUserController.text =
-          _preferences.getString('auth_user') ?? '';
+          _preferences.getString('auth_user') ?? '901';
     });
   }
 
@@ -122,164 +123,183 @@ class _MyRegisterWidget extends State<RegisterWidget>
         appBar: AppBar(
           title: Text("SIP Account"),
         ),
-        body: Align(
-            alignment: Alignment(0, 0),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Column(
-                    children: <Widget>[
-                      Padding(
-                        padding:
-                            const EdgeInsets.fromLTRB(48.0, 18.0, 48.0, 18.0),
-                        child: Center(
-                            child: Text(
-                          'Register Status: ${EnumHelper.getName(_registerState.state)}',
-                          style: TextStyle(fontSize: 18, color: Colors.black54),
-                        )),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(48.0, 18.0, 48.0, 0),
-                        child: Align(
-                          child: Text('WebSocket:'),
-                          alignment: Alignment.centerLeft,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(48.0, 0.0, 48.0, 0),
-                        child: TextFormField(
-                          controller: _wsUriController,
-                          keyboardType: TextInputType.text,
-                          textAlign: TextAlign.center,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.all(10.0),
-                            border: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black12)),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(46.0, 18.0, 48.0, 0),
-                        child: Align(
-                          child: Text('SIP URI:'),
-                          alignment: Alignment.centerLeft,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(48.0, 0.0, 48.0, 0),
-                        child: TextFormField(
-                          controller: _sipUriController,
-                          keyboardType: TextInputType.text,
-                          textAlign: TextAlign.center,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.all(10.0),
-                            border: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black12)),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(46.0, 18.0, 48.0, 0),
-                        child: Align(
-                          child: Text('Authorization User:'),
-                          alignment: Alignment.centerLeft,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(48.0, 0.0, 48.0, 0),
-                        child: TextFormField(
-                          controller: _authorizationUserController,
-                          keyboardType: TextInputType.text,
-                          textAlign: TextAlign.center,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.all(10.0),
-                            border: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black12)),
-                            hintText: _authorizationUserController.text.isEmpty
-                                ? '[Empty]'
-                                : null,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(46.0, 18.0, 48.0, 0),
-                        child: Align(
-                          child: Text('Password:'),
-                          alignment: Alignment.centerLeft,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(48.0, 0.0, 48.0, 0),
-                        child: TextFormField(
-                          controller: _passwordController,
-                          keyboardType: TextInputType.text,
-                          textAlign: TextAlign.center,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.all(10.0),
-                            border: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black12)),
-                            hintText: _passwordController.text.isEmpty
-                                ? '[Empty]'
-                                : null,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(46.0, 18.0, 48.0, 0),
-                        child: Align(
-                          child: Text('Display Name:'),
-                          alignment: Alignment.centerLeft,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(48.0, 0.0, 48.0, 0),
-                        child: TextFormField(
-                          controller: _displayNameController,
-                          keyboardType: TextInputType.text,
-                          textAlign: TextAlign.center,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.all(10.0),
-                            border: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black12)),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                      padding: const EdgeInsets.fromLTRB(0.0, 18.0, 0.0, 0.0),
-                      child: Container(
-                        height: 48.0,
-                        width: 160.0,
-                        child: MaterialButton(
-                          child: Text(
-                            'Register',
+        body: SingleChildScrollView(
+          child: Align(
+              alignment: Alignment(0, 0),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(48.0, 18.0, 48.0, 18.0),
+                          child: Center(
+                              child: Text(
+                            'Register Status: ${EnumHelper.getName(_registerState.state)}',
                             style:
-                                TextStyle(fontSize: 16.0, color: Colors.white),
-                          ),
-                          color: Colors.blue,
-                          textColor: Colors.white,
-                          onPressed: () => _handleSave(context),
+                                TextStyle(fontSize: 18, color: Colors.black54),
+                          )),
                         ),
-                      ))
-                ])));
+                        Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(48.0, 18.0, 48.0, 0),
+                          child: Align(
+                            child: Text('WebSocket:'),
+                            alignment: Alignment.centerLeft,
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(48.0, 0.0, 48.0, 0),
+                          child: TextFormField(
+                            controller: _wsUriController,
+                            keyboardType: TextInputType.text,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.all(10.0),
+                              border: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black12),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: <Widget>[
+                        Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(46.0, 18.0, 48.0, 0),
+                          child: Align(
+                            child: Text('SIP URI:'),
+                            alignment: Alignment.centerLeft,
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(48.0, 0.0, 48.0, 0),
+                          child: TextFormField(
+                            controller: _sipUriController,
+                            keyboardType: TextInputType.text,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.all(10.0),
+                              border: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.black12)),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: <Widget>[
+                        Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(46.0, 18.0, 48.0, 0),
+                          child: Align(
+                            child: Text('Authorization User:'),
+                            alignment: Alignment.centerLeft,
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(48.0, 0.0, 48.0, 0),
+                          child: TextFormField(
+                            controller: _authorizationUserController,
+                            keyboardType: TextInputType.text,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.all(10.0),
+                              border: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.black12)),
+                              hintText:
+                                  _authorizationUserController.text.isEmpty
+                                      ? '[Empty]'
+                                      : null,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: <Widget>[
+                        Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(46.0, 18.0, 48.0, 0),
+                          child: Align(
+                            child: Text('Password:'),
+                            alignment: Alignment.centerLeft,
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(48.0, 0.0, 48.0, 0),
+                          child: TextFormField(
+                            controller: _passwordController,
+                            keyboardType: TextInputType.text,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.all(10.0),
+                              border: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.black12)),
+                              hintText: _passwordController.text.isEmpty
+                                  ? '[Empty]'
+                                  : null,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: <Widget>[
+                        Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(46.0, 18.0, 48.0, 0),
+                          child: Align(
+                            child: Text('Display Name:'),
+                            alignment: Alignment.centerLeft,
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(48.0, 0.0, 48.0, 0),
+                          child: TextFormField(
+                            controller: _displayNameController,
+                            keyboardType: TextInputType.text,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.all(10.0),
+                              border: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.black12)),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                        padding: const EdgeInsets.fromLTRB(0.0, 18.0, 0.0, 0.0),
+                        child: Container(
+                          height: 48.0,
+                          width: 160.0,
+                          child: MaterialButton(
+                            child: Text(
+                              'Register',
+                              style: TextStyle(
+                                  fontSize: 16.0, color: Colors.white),
+                            ),
+                            color: Colors.blue,
+                            textColor: Colors.white,
+                            onPressed: () => _handleSave(context),
+                          ),
+                        ))
+                  ])),
+        ));
   }
 
   @override

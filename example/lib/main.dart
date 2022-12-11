@@ -1,9 +1,9 @@
+import 'package:dart_sip_ua_example/src/settings.dart';
 import 'package:flutter/foundation.dart'
     show debugDefaultTargetPlatformOverride;
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:sip_ua/sip_ua.dart';
-
 
 import 'src/about.dart';
 import 'src/callscreen.dart';
@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
     '/callscreen': ([SIPUAHelper? helper, Object? arguments]) =>
         CallScreenWidget(helper, arguments as Call?),
     '/about': ([SIPUAHelper? helper, Object? arguments]) => AboutWidget(),
+    '/settings': ([SIPUAHelper? helper, Object? arguments]) => Settings(helper),
   };
 
   Route<dynamic>? _onGenerateRoute(RouteSettings settings) {
@@ -53,6 +54,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
