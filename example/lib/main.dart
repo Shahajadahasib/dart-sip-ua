@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
     '/callscreen': ([SIPUAHelper? helper, Object? arguments]) =>
         CallScreenWidget(helper, arguments as Call?),
     '/about': ([SIPUAHelper? helper, Object? arguments]) => AboutWidget(),
-    '/settings': ([SIPUAHelper? helper, Object? arguments]) => Settings(helper),
+    '/settings': ([SIPUAHelper? helper, Object? arguments]) => Settings(),
   };
 
   Route<dynamic>? _onGenerateRoute(RouteSettings settings) {

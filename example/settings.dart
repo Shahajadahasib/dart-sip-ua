@@ -1,26 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sip_ua/sip_ua.dart';
 
 class Settings extends StatefulWidget {
-  Settings({Key? key}) : super(key: key);
+  final SIPUAHelper? _helper;
+  Settings(this._helper, {Key? key}) : super(key: key);
   @override
   _MySettings createState() => _MySettings();
 }
 
-class _MySettings extends State<Settings> {
+class _MySettings extends State<Settings> implements SipUaHelperListener {
   final TextEditingController _numberController = TextEditingController();
 
   late SharedPreferences _preferences;
+  late RegistrationState _registerState;
+
+  SIPUAHelper? get helper => widget._helper;
 
   @override
   initState() {
     super.initState();
+    _registerState = helper!.registerState;
+    helper!.addSipUaHelperListener(this);
     _loadSettings();
   }
 
   @override
   deactivate() {
     super.deactivate();
+    helper!.removeSipUaHelperListener(this);
     _saveSettings();
   }
 
@@ -33,6 +41,13 @@ class _MySettings extends State<Settings> {
 
   void _saveSettings() {
     _preferences.setString('number', _numberController.text);
+  }
+
+  @override
+  void registrationStateChanged(RegistrationState state) {
+    setState(() {
+      _registerState = state;
+    });
   }
 
   void _alert(BuildContext context, String alertFieldName) {
@@ -60,14 +75,13 @@ class _MySettings extends State<Settings> {
     if (_numberController.text == '') {
       _alert(context, "Number Not Valid");
     }
-    Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Call Settings"),
+        title: Text("SIP Account"),
       ),
       body: Align(
         alignment: Alignment(0, 0),
@@ -76,17 +90,24 @@ class _MySettings extends State<Settings> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Column(
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(48.0, 18.0, 48.0, 18.0),
+                  child: Center(
                     child: Text(
-                      'Dial Number',
+                      'Register Status: ${EnumHelper.getName(_registerState.state)}',
                       style: TextStyle(fontSize: 18, color: Colors.black54),
                     ),
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                Center(
+                  child: Text(
+                    'Dial Number',
+                    style: TextStyle(fontSize: 18, color: Colors.black54),
                   ),
                 ),
                 TextFormField(
@@ -122,5 +143,23 @@ class _MySettings extends State<Settings> {
         ),
       ),
     );
+  }
+
+  @override
+  void callStateChanged(Call call, CallState state) {
+    //NO OP
+  }
+
+  @override
+  void transportStateChanged(TransportState state) {}
+
+  @override
+  void onNewMessage(SIPMessageRequest msg) {
+    // NO OP
+  }
+
+  @override
+  void onNewNotify(Notify ntf) {
+    // NO OP
   }
 }
