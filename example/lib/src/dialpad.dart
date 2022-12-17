@@ -119,67 +119,72 @@ class _MyDialPadWidget extends State<DialPadWidget>
     return null;
   }
 
-  void _handleBackSpace([bool deleteAll = false]) {
-    var text = _textController!.text;
-    if (text.isNotEmpty) {
-      setState(() {
-        text = deleteAll ? '' : text.substring(0, text.length - 1);
-        _textController!.text = text;
-      });
-    }
-  }
+//back space
 
-  void _handleNum(String number) {
-    setState(() {
-      _textController!.text += number;
-    });
-  }
+  // void _handleBackSpace([bool deleteAll = false]) {
+  //   var text = _textController!.text;
+  //   if (text.isNotEmpty) {
+  //     setState(() {
+  //       text = deleteAll ? '' : text.substring(0, text.length - 1);
+  //       _textController!.text = text;
+  //     });
+  //   }
+  // }
 
-  List<Widget> _buildNumPad() {
-    var labels = [
-      [
-        {'1': ''},
-        {'2': 'abc'},
-        {'3': 'def'}
-      ],
-      [
-        {'4': 'ghi'},
-        {'5': 'jkl'},
-        {'6': 'mno'}
-      ],
-      [
-        {'7': 'pqrs'},
-        {'8': 'tuv'},
-        {'9': 'wxyz'}
-      ],
-      [
-        {'*': ''},
-        {'0': '+'},
-        {'#': ''}
-      ],
-    ];
+//input number handle
+  // void _handleNum(String number) {
+  //   setState(() {
+  //     _textController!.text += number;
+  //   });
+  // }
 
-    return labels
-        .map(
-          (row) => Padding(
-            padding: const EdgeInsets.all(12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: row
-                  .map(
-                    (label) => ActionButton(
-                      title: label.keys.first,
-                      subTitle: label.values.first,
-                      onPressed: () => _handleNum(label.keys.first),
-                      number: true,
-                    ),
-                  )
-                  .toList(),
-            ),
-          ),
-        )
-        .toList();
-  }
+  //number pad
+
+  // List<Widget> _buildNumPad() {
+  //   var labels = [
+  //     [
+  //       {'1': ''},
+  //       {'2': 'abc'},
+  //       {'3': 'def'}
+  //     ],
+  //     [
+  //       {'4': 'ghi'},
+  //       {'5': 'jkl'},
+  //       {'6': 'mno'}
+  //     ],
+  //     [
+  //       {'7': 'pqrs'},
+  //       {'8': 'tuv'},
+  //       {'9': 'wxyz'}
+  //     ],
+  //     [
+  //       {'*': ''},
+  //       {'0': '+'},
+  //       {'#': ''}
+  //     ],
+  //   ];
+
+  //   return labels
+  //       .map(
+  //         (row) => Padding(
+  //           padding: const EdgeInsets.all(12),
+  //           child: Row(
+  //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //             children: row
+  //                 .map(
+  //                   (label) => ActionButton(
+  //                     title: label.keys.first,
+  //                     subTitle: label.values.first,
+  //                     onPressed: () => _handleNum(label.keys.first),
+  //                     number: true,
+  //                   ),
+  //                 )
+  //                 .toList(),
+  //           ),
+  //         ),
+  //       )
+  //       .toList();
+  // }
 
   List<Widget> _buildDialPad() {
     return [
@@ -205,15 +210,17 @@ class _MyDialPadWidget extends State<DialPadWidget>
           ],
         ),
       ),
-      Container(
-        color: Colors.green,
-        width: 300,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: _buildNumPad(),
-        ),
-      ),
+      //number pad
+
+      // Container(
+      //   color: Colors.green,
+      //   width: 300,
+      //   child: Column(
+      //     crossAxisAlignment: CrossAxisAlignment.center,
+      //     mainAxisAlignment: MainAxisAlignment.center,
+      //     children: _buildNumPad(),
+      //   ),
+      // ),
       Container(
         color: Colors.black,
         width: 300,
@@ -232,11 +239,13 @@ class _MyDialPadWidget extends State<DialPadWidget>
                 fillColor: Colors.green,
                 onPressed: () => _handleCall(context, true),
               ),
-              ActionButton(
-                icon: Icons.keyboard_arrow_left,
-                onPressed: () => _handleBackSpace(),
-                onLongPress: () => _handleBackSpace(true),
-              ),
+              //backspace
+
+              // ActionButton(
+              //   icon: Icons.keyboard_arrow_left,
+              //   onPressed: () => _handleBackSpace(),
+              //   onLongPress: () => _handleBackSpace(true),
+              // ),
             ],
           ),
         ),
@@ -249,7 +258,8 @@ class _MyDialPadWidget extends State<DialPadWidget>
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Demo"),
+        title:
+            Text('Status: ${EnumHelper.getName(helper!.registerState.state)}'),
         actions: <Widget>[
           PopupMenuButton<String>(
             onSelected: (String value) {
@@ -330,22 +340,22 @@ class _MyDialPadWidget extends State<DialPadWidget>
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(6.0),
-              child: Center(
-                  child: Text(
-                'Status: ${EnumHelper.getName(helper!.registerState.state)}',
-                style: TextStyle(fontSize: 18, color: Colors.black54),
-              )),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(6.0),
-              child: Center(
-                  child: Text(
-                'Received Message: $receivedMsg',
-                style: TextStyle(fontSize: 14, color: Colors.black54),
-              )),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.all(6.0),
+            //   child: Center(
+            //       child: Text(
+            //     'Status: ${EnumHelper.getName(helper!.registerState.state)}',
+            //     style: TextStyle(fontSize: 18, color: Colors.black54),
+            //   )),
+            // ),
+            // Padding(
+            //   padding: const EdgeInsets.all(6.0),
+            //   child: Center(
+            //       child: Text(
+            //     'Received Message: $receivedMsg',
+            //     style: TextStyle(fontSize: 14, color: Colors.black54),
+            //   )),
+            // ),
             Container(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
