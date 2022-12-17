@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,6 +13,13 @@ class _MySettings extends State<Settings> {
   final TextEditingController _numberController = TextEditingController();
 
   late SharedPreferences _preferences;
+  // Initial Selected Value
+  bool voiceOnly = true;
+  var dropdownvalue = 'Audio Call';
+  var items = [
+    'Audio Call',
+    'Video Call',
+  ];
 
   @override
   initState() {
@@ -28,11 +37,14 @@ class _MySettings extends State<Settings> {
     _preferences = await SharedPreferences.getInstance();
     setState(() {
       _numberController.text = _preferences.getString('number') ?? '';
+      voiceOnly = _preferences.getBool('voiceOnly') ?? true;
+      dropdownvalue = voiceOnly ? 'Audio Call' : 'Video Call';
     });
   }
 
   void _saveSettings() {
     _preferences.setString('number', _numberController.text);
+    _preferences.setBool('voiceOnly', voiceOnly);
   }
 
   void _alert(BuildContext context, String alertFieldName) {
@@ -99,6 +111,24 @@ class _MySettings extends State<Settings> {
                       borderSide: BorderSide(color: Colors.black12),
                     ),
                   ),
+                ),
+                DropdownButton(
+                  value: dropdownvalue,
+                  // icon: const Icon(Icons.call),
+                  items: items.map((String items) {
+                    return DropdownMenuItem(
+                      value: items,
+                      child: Text(items),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      dropdownvalue = newValue!;
+                      newValue == 'Audio Call'
+                          ? voiceOnly = true
+                          : voiceOnly = false;
+                    });
+                  },
                 ),
               ],
             ),

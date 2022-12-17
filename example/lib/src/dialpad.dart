@@ -68,8 +68,10 @@ class _MyDialPadWidget extends State<DialPadWidget>
     helper!.addSipUaHelperListener(this);
   }
 
-  Future<Widget?> _handleCall(BuildContext context,
-      [bool voiceOnly = false]) async {
+  Future<Widget?> _handleCall({
+    required BuildContext context,
+    required bool voiceOnly,
+  }) async {
     var dest = _preferences.getString('number') ?? '';
     if (defaultTargetPlatform == TargetPlatform.android ||
         defaultTargetPlatform == TargetPlatform.iOS ||
@@ -77,7 +79,7 @@ class _MyDialPadWidget extends State<DialPadWidget>
       await Permission.microphone.request();
       await Permission.camera.request();
     }
-    if (dest == null || dest.isEmpty) {
+    if (dest.isEmpty) {
       showDialog<void>(
         context: context,
         barrierDismissible: false,
@@ -223,6 +225,9 @@ class _MyDialPadWidget extends State<DialPadWidget>
       //     children: _buildNumPad(),
       //   ),
       // ),
+
+//video audio buttons
+
       Container(
         color: Colors.black,
         width: 300,
@@ -234,12 +239,13 @@ class _MyDialPadWidget extends State<DialPadWidget>
             children: <Widget>[
               ActionButton(
                 icon: Icons.videocam,
-                onPressed: () => _handleCall(context),
+                onPressed: () =>
+                    _handleCall(context: context, voiceOnly: false),
               ),
               ActionButton(
                 icon: Icons.dialer_sip,
                 fillColor: Colors.green,
-                onPressed: () => _handleCall(context, true),
+                onPressed: () => _handleCall(context: context, voiceOnly: true),
               ),
               //backspace
 
@@ -251,7 +257,14 @@ class _MyDialPadWidget extends State<DialPadWidget>
             ],
           ),
         ),
-      )
+      ),
+
+      ActionButton(
+        icon: Icons.dialer_sip,
+        fillColor: Colors.green,
+        onPressed: () => _handleCall(
+            context: context, voiceOnly: _preferences.getBool('voiceOnly')!),
+      ),
     ];
   }
 
