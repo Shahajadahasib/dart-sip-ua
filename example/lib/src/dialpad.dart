@@ -22,13 +22,17 @@ class _MyDialPadWidget extends State<DialPadWidget>
   late SharedPreferences _preferences;
 
   String? receivedMsg;
-
+  final Map<String, String> _wsExtraHeaders = {
+    // 'Origin': ' https://tryit.jssip.net',
+    // 'Host': 'tryit.jssip.net:10443'
+  };
   @override
   initState() {
     super.initState();
     receivedMsg = "";
     _bindEventListeners();
     _loadSettings();
+    _registerAccount();
   }
 
   void _loadSettings() async {
@@ -38,6 +42,25 @@ class _MyDialPadWidget extends State<DialPadWidget>
     _textController!.text = _dest!;
 
     setState(() {});
+  }
+
+  void _registerAccount() async {
+    _preferences = await SharedPreferences.getInstance();
+    UaSettings settings = UaSettings();
+
+    settings.webSocketUrl = _preferences.getString('ws_uri')!;
+    settings.webSocketSettings.extraHeaders = _wsExtraHeaders;
+    settings.webSocketSettings.allowBadCertificate = true;
+    //settings.webSocketSettings.userAgent = 'Dart/2.8 (dart:io) for OpenSIPS.';
+
+    settings.uri = _preferences.getString('sip_uri');
+    settings.authorizationUser = _preferences.getString('auth_user');
+    settings.password = _preferences.getString('password');
+    settings.displayName = _preferences.getString('display_name');
+    settings.userAgent = 'Dart SIP Client v1.0.0';
+    settings.dtmfMode = DtmfMode.RFC2833;
+
+    helper!.start(settings);
   }
 
   void _bindEventListeners() {
