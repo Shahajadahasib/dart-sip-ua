@@ -75,6 +75,7 @@ class _MySettings extends State<Settings> implements SipUaHelperListener {
     if (_numberController.text == '') {
       _alert(context, "Number Not Valid");
     }
+    Navigator.pop(context);
   }
 
   @override

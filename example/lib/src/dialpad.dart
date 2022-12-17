@@ -37,7 +37,8 @@ class _MyDialPadWidget extends State<DialPadWidget>
 
   void _loadSettings() async {
     _preferences = await SharedPreferences.getInstance();
-    _dest = _preferences.getString('dest') ?? 'sip:hello_jssip@tryit.jssip.net';
+    _dest =
+        _preferences.getString('number') ?? 'No Emergency Number Added Yet!';
     _textController = TextEditingController(text: _dest);
     _textController!.text = _dest!;
 
@@ -82,8 +83,8 @@ class _MyDialPadWidget extends State<DialPadWidget>
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Target is empty.'),
-            content: Text('Please enter a SIP URI or username!'),
+            title: Text('No Number Added'),
+            content: Text('Please Add Number in the settings menu!'),
             actions: <Widget>[
               TextButton(
                 child: Text('Ok'),
@@ -196,11 +197,12 @@ class _MyDialPadWidget extends State<DialPadWidget>
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
-              width: 360,
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              width: MediaQuery.of(context).size.width,
               child: TextField(
                 keyboardType: TextInputType.text,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 24, color: Colors.black54),
+                style: TextStyle(fontSize: 20, color: Colors.black54),
                 decoration: InputDecoration(
                   border: InputBorder.none,
                 ),
