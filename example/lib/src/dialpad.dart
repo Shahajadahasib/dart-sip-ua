@@ -192,27 +192,37 @@ class _MyDialPadWidget extends State<DialPadWidget>
   List<Widget> _buildDialPad() {
     return [
       Container(
-        width: 360,
-        // color: Colors.red,
+        width: 350,
+        color: Color.fromARGB(31, 99, 88, 88),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              width: MediaQuery.of(context).size.width,
-              child: TextField(
-                keyboardType: TextInputType.text,
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20, color: Colors.black54),
-                decoration: InputDecoration(
-                  border: InputBorder.none,
+            Expanded(
+              child: Container(
+                // color: Colors.green,
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                width: MediaQuery.of(context).size.width,
+                height: 50,
+                child: TextField(
+                  keyboardType: TextInputType.none,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 25,
+                      color: Colors.black54,
+                      fontWeight: FontWeight.bold),
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                  ),
+                  controller: _textController,
                 ),
-                controller: _textController,
               ),
             ),
           ],
         ),
+      ),
+      SizedBox(
+        height: 20,
       ),
       //number pad
 
@@ -226,38 +236,38 @@ class _MyDialPadWidget extends State<DialPadWidget>
       //   ),
       // ),
 
-//video audio buttons
+      //video audio buttons
 
-      Container(
-        color: Colors.black,
-        width: 300,
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              ActionButton(
-                icon: Icons.videocam,
-                onPressed: () =>
-                    _handleCall(context: context, voiceOnly: false),
-              ),
-              ActionButton(
-                icon: Icons.dialer_sip,
-                fillColor: Colors.green,
-                onPressed: () => _handleCall(context: context, voiceOnly: true),
-              ),
-              //backspace
+      // Container(
+      //   // color: Colors.black,
+      //   width: 300,
+      //   child: Padding(
+      //     padding: const EdgeInsets.all(12),
+      //     child: Row(
+      //       crossAxisAlignment: CrossAxisAlignment.center,
+      //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      //       children: <Widget>[
+      //         ActionButton(
+      //           icon: Icons.videocam,
+      //           onPressed: () =>
+      //               _handleCall(context: context, voiceOnly: false),
+      //         ),
+      //         ActionButton(
+      //           icon: Icons.dialer_sip,
+      //           fillColor: Colors.green,
+      //           onPressed: () => _handleCall(context: context, voiceOnly: true),
+      //         ),
+      //         //backspace
 
-              // ActionButton(
-              //   icon: Icons.keyboard_arrow_left,
-              //   onPressed: () => _handleBackSpace(),
-              //   onLongPress: () => _handleBackSpace(true),
-              // ),
-            ],
-          ),
-        ),
-      ),
+      //         // ActionButton(
+      //         //   icon: Icons.keyboard_arrow_left,
+      //         //   onPressed: () => _handleBackSpace(),
+      //         //   onLongPress: () => _handleBackSpace(true),
+      //         // ),
+      //       ],
+      //     ),
+      //   ),
+      // ),
 
       ActionButton(
         icon: Icons.dialer_sip,
@@ -349,37 +359,135 @@ class _MyDialPadWidget extends State<DialPadWidget>
           ),
         ],
       ),
-      body: Align(
-        alignment: Alignment(0, 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            // Padding(
-            //   padding: const EdgeInsets.all(6.0),
-            //   child: Center(
-            //       child: Text(
-            //     'Status: ${EnumHelper.getName(helper!.registerState.state)}',
-            //     style: TextStyle(fontSize: 18, color: Colors.black54),
-            //   )),
-            // ),
-            // Padding(
-            //   padding: const EdgeInsets.all(6.0),
-            //   child: Center(
-            //       child: Text(
-            //     'Received Message: $receivedMsg',
-            //     style: TextStyle(fontSize: 14, color: Colors.black54),
-            //   )),
-            // ),
-            Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: _buildDialPad(),
-              ),
+      body: Row(
+        children: [
+          Expanded(
+            // alignment: Alignment(0, 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                // Padding(
+                //   padding: const EdgeInsets.all(6.0),
+                //   child: Center(
+                //       child: Text(
+                //     'Status: ${EnumHelper.getName(helper!.registerState.state)}',
+                //     style: TextStyle(fontSize: 18, color: Colors.black54),
+                //   )),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.all(6.0),
+                //   child: Center(
+                //       child: Text(
+                //     'Received Message: $receivedMsg',
+                //     style: TextStyle(fontSize: 14, color: Colors.black54),
+                //   )),
+                // ),
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: _buildDialPad(),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AppBar(
+                  elevation: 0,
+                  backgroundColor: Colors.green,
+                  title: Text('name'),
+                  actions: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.video_call,
+                        size: 34,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.call,
+                        size: 34,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                  ],
+                ),
+                Expanded(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * .9,
+                    width: MediaQuery.of(context).size.width,
+                    color: Color.fromARGB(179, 198, 192, 192),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        // AppBar(
+                        //   elevation: 0,
+                        //   backgroundColor: Colors.green,
+                        //   title: Text('name'),
+                        //   actions: [
+                        //     Icon(
+                        //       Icons.video_call,
+                        //       size: 34,
+                        //     ),
+                        //     SizedBox(
+                        //       width: 15,
+                        //     ),
+                        //     Icon(
+                        //       Icons.call,
+                        //       size: 30,
+                        //     ),
+                        //     SizedBox(
+                        //       width: 15,
+                        //     ),
+                        //   ],
+                        // ),
+                        Text('data'),
+                        Container(
+                          width: MediaQuery.of(context).size.width * .32,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            // color: Colors.red,
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                                width: 1,
+                                color: Color.fromARGB(255, 143, 130, 130)),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(11.0),
+                            child: Text(
+                              'send message',
+                              style: TextStyle(
+                                  fontSize: 18, color: Colors.black38),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+
+                        // Text('data'),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
@@ -403,9 +511,11 @@ class _MyDialPadWidget extends State<DialPadWidget>
   void onNewMessage(SIPMessageRequest msg) {
     //Save the incoming message to DB
     String? msgBody = msg.request.body as String?;
-    setState(() {
-      receivedMsg = msgBody;
-    });
+    setState(
+      () {
+        receivedMsg = msgBody;
+      },
+    );
   }
 
   @override
